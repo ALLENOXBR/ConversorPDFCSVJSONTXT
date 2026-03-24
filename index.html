@@ -45,7 +45,6 @@
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: #f8fafc;
-            /* Redução de escala visual global */
             font-size: 0.875rem; 
         }
 
@@ -83,17 +82,20 @@
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Ajuste de escala para mobile */
         @media (max-width: 640px) {
             .glass-panel {
                 border-radius: 1.5rem !important;
             }
         }
+
+        /* Estilo para quebra de página no PDF */
+        .page-break {
+            page-break-after: always;
+        }
     </style>
 </head>
 <body class="text-slate-900 dark:text-white min-h-screen transition-colors duration-300 antialiased">
 
-    <!-- Container reduzido para aspecto mais refinado -->
     <div class="max-w-3xl mx-auto px-4 py-6 md:py-10">
         
         <!-- Header Minimalista -->
@@ -122,7 +124,6 @@
             <!-- Section 1: Inputs de Dados -->
             <div class="glass-panel p-4 md:p-5 rounded-[1.5rem] md:rounded-[2rem] shadow-sm">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Dropzone Compacta -->
                     <div id="dropZone" class="group relative border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl p-6 flex flex-col items-center justify-center cursor-pointer hover:border-brand transition-all">
                         <div class="w-10 h-10 bg-slate-50 dark:bg-slate-800 rounded-lg flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
                             <svg class="w-5 h-5 text-slate-400 group-hover:text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -133,16 +134,15 @@
                         <input type="file" id="fileInput" class="hidden" accept=".pdf,.txt">
                     </div>
 
-                    <!-- Texto Manual Refinado -->
                     <div class="relative">
                         <textarea id="manualText" 
                             class="w-full h-full min-h-[120px] p-3 text-xs font-medium rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-brand/30 focus:border-brand outline-none transition-all custom-scrollbar dark:text-white placeholder:text-slate-400"
-                            placeholder="OU COLE O CONTEÚDO AQUI..."></textarea>
+                            placeholder="COLE O CONTEÚDO CSV OU TEXTO AQUI..."></textarea>
                     </div>
                 </div>
             </div>
 
-            <!-- Section 2: Preview (Escalado para baixo) -->
+            <!-- Section 2: Preview -->
             <div id="previewContainer" class="hidden glass-panel p-4 rounded-[1.5rem] shadow-sm animate-in fade-in slide-in-from-bottom-2 duration-300">
                 <div class="flex justify-between items-center mb-3">
                     <h3 class="text-[10px] font-black uppercase tracking-widest text-brand">Monitor de Dados</h3>
@@ -153,9 +153,8 @@
                 <div id="textPreview" class="h-32 overflow-y-auto p-4 bg-slate-50 dark:bg-black/30 rounded-xl text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400 whitespace-pre-wrap custom-scrollbar border border-slate-100 dark:border-slate-800"></div>
             </div>
 
-            <!-- Section 3: Ações (Grid Inteligente Mobile/Desktop) -->
+            <!-- Section 3: Ações -->
             <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                <!-- CSV -->
                 <button onclick="convert('csv')" class="action-btn flex flex-col items-center justify-center gap-2 p-4 bg-white dark:bg-base-panel border border-slate-200 dark:border-slate-700 rounded-2xl hover:border-brand group">
                     <div class="p-2 bg-accent-yellow/10 rounded-lg">
                         <svg class="w-5 h-5 text-accent-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
@@ -163,7 +162,6 @@
                     <span class="text-[10px] font-black uppercase tracking-widest text-slate-500 group-hover:text-brand transition-colors">CSV</span>
                 </button>
                 
-                <!-- JSON -->
                 <button onclick="convert('json')" class="action-btn flex flex-col items-center justify-center gap-2 p-4 bg-white dark:bg-base-panel border border-slate-200 dark:border-slate-700 rounded-2xl hover:border-accent-blue group">
                     <div class="p-2 bg-accent-blue/10 rounded-lg">
                         <svg class="w-5 h-5 text-accent-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
@@ -171,7 +169,6 @@
                     <span class="text-[10px] font-black uppercase tracking-widest text-slate-500 group-hover:text-accent-blue transition-colors">JSON</span>
                 </button>
                 
-                <!-- PDF -->
                 <button onclick="convert('pdf')" class="action-btn flex flex-col items-center justify-center gap-2 p-4 bg-white dark:bg-base-panel border border-slate-200 dark:border-slate-700 rounded-2xl hover:border-accent-red group">
                     <div class="p-2 bg-accent-red/10 rounded-lg">
                         <svg class="w-5 h-5 text-accent-red" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
@@ -179,7 +176,6 @@
                     <span class="text-[10px] font-black uppercase tracking-widest text-slate-500 group-hover:text-accent-red transition-colors">PDF</span>
                 </button>
                 
-                <!-- TXT -->
                 <button onclick="convert('txt')" class="action-btn flex flex-col items-center justify-center gap-2 p-4 bg-white dark:bg-base-panel border border-slate-200 dark:border-slate-700 rounded-2xl hover:border-accent-green group">
                     <div class="p-2 bg-accent-green/10 rounded-lg">
                         <svg class="w-5 h-5 text-accent-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
@@ -188,7 +184,7 @@
                 </button>
             </div>
 
-            <!-- Status Box Refinado -->
+            <!-- Status Box -->
             <div id="statusBox" class="hidden text-[9px] p-3 rounded-xl text-center font-black uppercase tracking-[0.2em] animate-in zoom-in-95 duration-200 border"></div>
         </div>
         
@@ -197,24 +193,29 @@
         </footer>
     </div>
 
-    <!-- Template PDF Reduzido -->
-    <div id="pdfTemplate" class="hidden">
-        <div style="padding: 40px; font-family: 'Plus Jakarta Sans', sans-serif; color: #0f1214; background: #fff;">
-            <div style="border-bottom: 5px solid #ff9100; padding-bottom: 20px; margin-bottom: 30px;">
-                <h1 style="margin: 0; color: #ff9100; font-size: 24px; font-weight: 900; text-transform: uppercase;">Exportação de Dados</h1>
-                <p style="margin: 5px 0 0 0; font-size: 9px; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Documento gerado via Conversor Universal</p>
+    <!-- Template PDF Otimizado para Multilistas -->
+    <div id="pdfExportWrapper" style="position: absolute; left: -9999px; top: -9999px;">
+        <div id="pdfTemplate" style="width: 700px; padding: 40px; font-family: 'Plus Jakarta Sans', sans-serif; color: #0f1214; background: #fff;">
+            <div style="border-bottom: 5px solid #ff9100; padding-bottom: 15px; margin-bottom: 25px;">
+                <h1 style="margin: 0; color: #ff9100; font-size: 22px; font-weight: 900; text-transform: uppercase;">Relatório de Alunos</h1>
+                <p style="margin: 5px 0 0 0; font-size: 10px; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Exportação de lista completa</p>
             </div>
-            <div id="pdfContentBody" style="font-size: 11px; white-space: pre-wrap; color: #1e293b; text-align: justify; line-height: 1.6;"></div>
+            <div id="pdfContentBody" style="font-size: 12px; color: #1e293b; line-height: 1.6; word-wrap: break-word;">
+                <!-- O conteúdo será injetado aqui -->
+            </div>
+            <div style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 10px; font-size: 8px; color: #999; text-align: center;">
+                Página gerada automaticamente pelo Conversor Universal CSV/JSON/PDF
+            </div>
         </div>
     </div>
 
-    <!-- Loading Overlay Minimalista -->
+    <!-- Loading Overlay -->
     <div id="loadingOverlay" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden flex items-center justify-center z-50 p-6">
         <div class="bg-white dark:bg-base-panel p-8 rounded-[2rem] flex flex-col items-center gap-4 border border-brand/20 w-full max-w-xs text-center">
             <div class="w-12 h-12 border-4 border-slate-100 dark:border-slate-800 border-t-brand rounded-full animate-spin"></div>
             <div>
                 <p class="text-[11px] font-black uppercase tracking-[0.3em] text-brand">Sincronizando...</p>
-                <p class="text-[8px] font-bold text-slate-500 mt-1 uppercase">Aguarde o processamento local</p>
+                <p class="text-[8px] font-bold text-slate-500 mt-1 uppercase">Processando lista volumosa</p>
             </div>
         </div>
     </div>
@@ -235,7 +236,9 @@
             loadingOverlay: document.getElementById('loadingOverlay'),
             statusBox: document.getElementById('statusBox'),
             themeToggle: document.getElementById('themeToggle'),
-            clearBtn: document.getElementById('clearBtn')
+            clearBtn: document.getElementById('clearBtn'),
+            pdfContentBody: document.getElementById('pdfContentBody'),
+            pdfTemplate: document.getElementById('pdfTemplate')
         };
 
         els.themeToggle.addEventListener('click', () => {
@@ -315,7 +318,8 @@
             setLoading(true);
             try {
                 const ts = new Date().getTime();
-                const filename = `export_${ts}`;
+                const filename = `lista_alunos_${ts}`;
+                
                 switch(type) {
                     case 'csv':
                         const csv = "Linha,Conteudo,Pagina\n" + extractedData.map(d => `${d.linha},"${d.texto.replace(/"/g, '""')}",${d.pagina}`).join("\n");
@@ -328,18 +332,38 @@
                         saveAs(new Blob([rawText], {type: "text/plain;charset=utf-8"}), `${filename}.txt`);
                         break;
                     case 'pdf':
-                        document.getElementById('pdfContentBody').innerText = rawText;
+                        // Prepara o conteúdo do PDF como uma lista estruturada
+                        const items = rawText.split('\n').filter(line => line.trim() !== "");
+                        let htmlContent = '<div style="display: flex; flex-direction: column; gap: 8px;">';
+                        items.forEach((item, index) => {
+                            htmlContent += `
+                                <div style="display: flex; border-bottom: 1px solid #f1f5f9; padding: 4px 0;">
+                                    <span style="width: 30px; font-weight: 800; color: #ff9100;">${index + 1}.</span>
+                                    <span>${item.trim()}</span>
+                                </div>
+                            `;
+                        });
+                        htmlContent += '</div>';
+                        
+                        els.pdfContentBody.innerHTML = htmlContent;
+
                         const opt = { 
-                            margin: 0.5, filename: `${filename}.pdf`, 
-                            html2canvas: { scale: 2 }, 
-                            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } 
+                            margin: 0.3, 
+                            filename: `${filename}.pdf`, 
+                            image: { type: 'jpeg', quality: 0.98 },
+                            html2canvas: { scale: 2, useCORS: true, logging: false }, 
+                            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
+                            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] } // CRÍTICO: Evita cortes no meio de nomes
                         };
-                        await html2pdf().set(opt).from(document.getElementById('pdfTemplate').innerHTML).save();
+                        
+                        // Captura o elemento visível temporariamente ou o elemento injetado
+                        await html2pdf().set(opt).from(els.pdfTemplate).save();
                         break;
                 }
-                showStatus("Sucesso!");
+                showStatus("Exportação concluída!");
             } catch (e) {
-                showStatus("Erro no Processo", "error");
+                console.error(e);
+                showStatus("Erro na geração. Tente reduzir o texto.", "error");
             } finally {
                 setLoading(false);
             }
